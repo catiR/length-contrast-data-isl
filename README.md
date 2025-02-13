@@ -1,12 +1,12 @@
 ---
 title: Length contrasts in spoken Icelandic
-emoji: 📊
+emoji: 💬
 colorFrom: gray
 colorTo: green
 sdk: gradio
-sdk_version: 5.15.0
+sdk_version: 5.16.0
 app_file: app.py
-pinned: false
+pinned: true
 ---
 
 ## Assessed and Annotated Vowel Lengths in Spoken Icelandic Sentences for L1 and L2 Speakers: A Resource for Pronunciation Training
