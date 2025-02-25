@@ -78,7 +78,7 @@ def plott(g1,w1,l1,s1,g2,w2,l2,s2):
 
 
 
-bl = gr.Blocks(theme=gr.themes.Glass())
+bl = gr.Blocks()#theme=gr.themes.Glass())
 
 with bl:
 	
@@ -108,8 +108,8 @@ with bl:
 					#### Select data (2)
 					"""
 						)
-					gmenu2 = gr.Dropdown(choices=['[NONE]'] + grouplist,label="Group", value='[NONE]')
-					wmenu2 = gr.Dropdown(label="Word", choices=['[NONE]'])
+					gmenu2 = gr.Dropdown(choices=['[NONE]'] + grouplist,label="Group", value='A:L')
+					wmenu2 = gr.Dropdown(label="Word", choices=['[ALL]'] + [n for n,v in worddict['A:L']])
 					lmenu2 = gr.Radio(choices=["L1", "L2","All"],label="Speaker group",value="L1")
 					smenu2 = gr.Dropdown(["Annotated", "MFA"],label="Source",value="Annotated")
 
@@ -118,7 +118,7 @@ with bl:
 
 	
 			btn = gr.Button(value="Update Plot")
-			plo = gr.Plot()
+			plo = gr.Plot(value=plott('AL:','[ALL]',"L1","Annotated",'A:L','[ALL]',"L1","Annotated"))
 			btn.click(plott, [gmenu1,wmenu1,lmenu1,smenu1,gmenu2,wmenu2,lmenu2,smenu2], plo)
 
 
@@ -140,6 +140,21 @@ with bl:
 			"""
 				 )
 
+			
+			gr.Markdown(
+			"""
+			### About
+
+			This annotated data and its demo application accompany the paper 
+			*Assessed and Annotated Vowel Lengths in Spoken Icelandic Sentences\
+			for L1 and L2 Speakers: A Resource for Pronunciation Training*, \
+			Caitlin Laura Richter, Kolbrún Friðriksdóttir, Kormákur Logi Bergsson, \
+			Erik Anders Maher, Ragnheiður María Benediktsdóttir, Jon Gudnason - NoDaLiDa/Baltic-HLT 2025, Tallinn, Estonia.
+			
+
+			"""
+				 )
+			
 			gr.Markdown(
 				""" 
 				## Demo: Viewing the data
@@ -147,6 +162,9 @@ with bl:
 				Words are split into related groups and either the whole group or a single word can be selected. 
 				Available speaker groups are native Icelandic speakers (L1), second-language speakers (L2), or all. 
 				Data source options are gold (human) annotations or automated Montreal Forced Aligner (MFA).
+
+				The display is a scatter plot of vowel and consonant durations,
+				supplemented with density plots for each dimension separately.
 
 				The general expectation is that, all else being equal, syllables with long stressed vowels 
 				followed by short consonants have a higher vowel:(vowel+consonant) duration ratio, 
@@ -161,7 +179,6 @@ with bl:
 				)
 
 
-			
 			gr.Markdown(
 				""" 
 			## Accessing the data
@@ -171,25 +188,69 @@ with bl:
 			or [tsv](https://github.com/catiR/length-contrast-data-isl/blob/main/Data/Length_in_spoken_icelandic.tsv) files. 
 			See [the paper](https://github.com/catiR/length-contrast-data-isl/blob/main/Data/133_Annotated_Vowel_Lengths.pdf) 
 			for complete information. 
+			"""
+				 )
 
+			gr.Markdown(
+				""" 
 			Audio is available from [Clarin](https://repository.clarin.is/repository/xmlui/) (Samrómur). 
 			The 'collection' field plus recording filename in the annotations metadata 
 			specify the original audio file, including which Samrómur collection it is found in. 
 			"""
 				 )
 
+			gr.Markdown(
+				""" 
+Annotation records are in the following scheme: 
+
+```
+[ { recording: source-file-id.wav,
+    collection: samromur-collection,
+    speaker_lang: L1/L2,
+    word: target-word,
+    word_context: { 
+        normalised: normalised-carrier-sentence-text,
+        before: sentence-context-preceding-token,
+        after: sentence-context-following-token 
+    },
+    gold_annotation: {
+        target_word_start: seconds,
+        target_word_end: seconds,
+        prevowel: [ { 
+                phone: ipa-character,
+                start: seconds,
+                end: seconds, 
+                }, 
+                { phone2 ... } ,
+        ], 
+        vowel: [ { 
+                phone: ipa-character,
+                start: seconds,
+                end: seconds, 
+                }, 
+        ], 
+        postvowel: [ { 
+                phone: ipa-character,
+                start: seconds,
+                end: seconds, 
+                }, 
+        ]
+    },
+    mfa_annotation : {
+     ... as for gold ...
+    }
+ },
+]
+```	
+		
+				"""
+				 )
+			
+
+
 
 			gr.Markdown(
 			"""
-			### About
-
-			This annotated data and its demo application accompany the paper 
-			*Assessed and Annotated Vowel Lengths in Spoken Icelandic Sentences\
-			for L1 and L2 Speakers: A Resource for Pronunciation Training*, \
-			Caitlin Laura Richter, Kolbrún Friðriksdóttir, Kormákur Logi Bergsson, \
-			Erik Anders Maher, Ragnheiður María Benediktsdóttir, Jon Gudnason - NoDaLiDa/Baltic-HLT 2025, Tallinn, Estonia.
-			
-
 			### Contact caitlinr@ru.is about bugs, feedback, or collaboration!
 
 			"""
